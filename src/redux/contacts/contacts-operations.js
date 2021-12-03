@@ -17,12 +17,20 @@ export const fetchContacts = createAsyncThunk(
 
 export const addContact = createAsyncThunk(
     'contacts/add',
-    async ({ name, phone }, { rejectWithValue }) => {
+    async ({ name, number }, { getState, rejectWithValue }) => {
         try {
             const contact = {
                 name,
-                phone,
+                number,
             };
+            const state = getState();
+            const currentsContacts = state.contacts.items;
+
+            if (currentsContacts.find(el => el.name === name)) {
+                alert(`${name} is already in contacts`);
+                return rejectWithValue();
+            }
+
             const { data } = await axios.post('/contacts', contact);
             return data;
         } catch (error) {

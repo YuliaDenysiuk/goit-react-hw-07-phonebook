@@ -5,14 +5,7 @@ import { fetchContacts, addContact, deleteContact } from './contacts-operations'
 
 const items = createReducer([], {
     [fetchContacts.fulfilled]: (_, {payload}) => payload,
-    [addContact.fulfilled]: (state, { payload }) => {
-        if (state.find(el => el.name === payload.name)) {
-            alert(`${payload.name} is already in contacts`)
-            return;
-        } else {
-            return [payload, ...state];
-        }
-    },
+    [addContact.fulfilled]: (state, { payload }) => [payload, ...state],
     [deleteContact.fulfilled]: (state, {payload}) => state.filter(contact => contact.id !== payload),
 });
 
